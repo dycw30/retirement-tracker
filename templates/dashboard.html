@@ -1,0 +1,38 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Retirement Tracker Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="header">
+            <h1>🗓️ H2 Retirement Tracker</h1>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+
+        {% for goal in goals %}
+            <div class="card">
+                <h2>{{ goal[1] }} → <strong>{{ goal[2] }}</strong></h2>
+                <p><strong>Objective:</strong> {{ goal[3] }}</p>
+                <p><strong>Target:</strong> {{ goal[4] }}</p>
+                <form action="{{ url_for('update') }}" method="POST">
+                    <input type="hidden" name="goal_id" value="{{ goal[0] }}">
+                    <label>Progress Notes:</label><br>
+                    <textarea name="notes" rows="2" required>{{ goal[5] or '' }}</textarea><br>
+
+                    <label>Progress Rating (1–5):</label>
+                    <input type="number" name="rating" min="1" max="5" value="{{ goal[6] or '' }}" required>
+
+                    <button type="submit">Update</button>
+                    {% if goal[7] %}
+                        <p class="updated">Last Updated: {{ goal[7].strftime('%Y-%m-%d %H:%M') }}</p>
+                    {% endif %}
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
