@@ -1,19 +1,18 @@
-# Use the official Python image
+# Use official Python image
 FROM python:3.10-slim
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the requirements first and install dependencies
+# Copy requirements and install
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
+# Copy app files
 COPY . .
 
-# Expose the port
+# Expose port for Railway to bind to
 EXPOSE 5000
 
-# Start the Flask app using gunicorn
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
+# Start the app
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
